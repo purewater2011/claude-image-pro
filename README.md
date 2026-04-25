@@ -8,25 +8,13 @@
 GPT Image 2: 3 秒出图  ¥0.78
 ```
 
-—— **本仓库的 Day14 演示封面就是它直播生成的。**
-
 ---
 
 ## 为什么做这个
 
 GPT Image 2（2026-04-22 全量上线）号称 99% 中文文字渲染、Image Arena 历史最大领先 242 分。但实测发现：**模型再强，普通用户喂的简单 prompt 还是出垃圾图**——必须经过结构化优化才能榨出 99%。
 
-社区已有的 [`baoyu-imagine`](https://github.com/JimLiu/baoyu-skills) 把"出图引擎"做得很完备（10+ provider，支持 batch、参考图、多模态），但**没做 prompt 自动优化层**。这就是 claude-image-pro 的差异化定位。
-
-| 维度 | baoyu-imagine | claude-image-pro |
-|---|---|---|
-| 出图引擎 | ✅ 10+ provider | ⚠️ 仅 OpenAI 兼容（够用） |
-| Batch / 参考图 | ✅ | ❌（v1 不做） |
-| **Prompt 自动优化层** | ❌ | ✅ **核心卖点** |
-| **5 大中文场景模板** | ❌ | ✅ |
-| **A/B 对比模式** | ❌ | ✅ |
-
-我们不抢 baoyu-imagine 的活——它是出图引擎，我们是它前面的提示词工程师。
+claude-image-pro 专注于 **prompt 自动优化层**：用 Claude Code 主进程把一句中文展开成结构化 200+ 字 prompt，再调 GPT Image 2 出图。
 
 ---
 
@@ -35,7 +23,7 @@ GPT Image 2（2026-04-22 全量上线）号称 99% 中文文字渲染、Image Ar
 - 🎯 **一句话出图**：中文输入 → 自动 200+ 字结构化 prompt → 出图
 - 🎨 **5 大中文场景模板**：抖音 UI / 微博 / 小红书 / 海报 / X 推文
 - ⚖️ **A/B 对比模式**：同一句话跑两次（未优化 vs skill 优化），看清差距
-- 📐 **9:16 抖音预设**：默认竖屏 1024×1536，社媒博主友好
+- 📐 **9:16 抖音预设**：默认竖屏 1024×1536,社媒博主友好
 - 🔌 **任意 OpenAI 兼容接口**：官方 / 自建中转站 / 第三方网关都行
 - 🪶 **零额外 LLM 成本**：优化层用 Claude Code 主进程做，不调外部 API
 - 🧩 **Claude Code Skill 原生**：`/image 画一张...` 即可触发
@@ -47,7 +35,7 @@ GPT Image 2（2026-04-22 全量上线）号称 99% 中文文字渲染、Image Ar
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/<your-handle>/claude-image-pro.git
+git clone https://github.com/purewater2011/claude-image-pro.git
 cd claude-image-pro
 ```
 
@@ -86,36 +74,28 @@ pip3 install requests pillow
 
 claude-image-pro 通过 OpenAI 协议调 gpt-image-2，**任何支持 `/v1/images/generations` 的服务都能跑**。
 
-### 推荐使用作者自建中转站
+编辑 `~/.claude-image-pro/.env`：
 
-> **[填你的中转站名]** — 直连官方反代，gpt-image-2 day-1 接入，失败不计费。
+```
+OPENAI_API_KEY=sk-xxx
+OPENAI_BASE_URL=https://your-gateway.example.com/v1
+OPENAI_IMAGE_MODEL=gpt-image-2
+```
 
-接入步骤：
+测试：
 
-1. 注册：[**填你的中转站注册地址**]
-2. 充值：建议先充 ¥10 测试
-3. 创建 API Key → 复制
-4. 编辑 `~/.claude-image-pro/.env`：
-   ```
-   OPENAI_API_KEY=sk-xxx
-   OPENAI_BASE_URL=https://[填你的中转站域名]/v1
-   OPENAI_IMAGE_MODEL=gpt-image-2
-   ```
-5. 测试：
-   ```bash
-   python3 scripts/main.py "测试一张图" --output /tmp/test.png
-   ```
+```bash
+python3 scripts/main.py "测试一张图" --output /tmp/test.png
+```
 
-### 用其他中转站？
-
-把 `OPENAI_BASE_URL` 换成对应域名即可。常见错误码：
+### 常见错误码
 
 | HTTP 状态 | 含义 | 解决 |
 |---|---|---|
 | 401 | API key 无效 | 检查 key 是否粘对 |
-| 404 | 模型不存在 | 中转站可能没接入 gpt-image-2，咨询客服 |
+| 404 | 模型不存在 | 接口可能没接入 gpt-image-2 |
 | 429 | 限速 | 等几秒重试，或升级套餐 |
-| 500-503 | 中转站抖动 | 换时段或换中转站 |
+| 500-503 | 服务抖动 | 换时段或换服务 |
 
 ---
 
@@ -167,19 +147,11 @@ python3 scripts/ab_compare.py --raw raw.png --enhanced enhanced.png --output com
 
 ## 路线图
 
-- ✅ v0.1: Day14 抖音上线（核心引擎 + douyin_ui 模板 + A/B 对比）
+- ✅ v0.1: 核心引擎 + douyin_ui 模板 + A/B 对比
 - ⏳ v0.2: 5 大场景模板补全（微博 / 小红书 / 海报 / X 推文）
 - ⏳ v0.3: 通用增强模板（未匹配场景的兜底）
 - ⏳ v0.4: 多图一致性 batch 模式（GPT Image 2 一次出 8 张）
 - ⏳ v0.5: 模板社区贡献机制 + 模板评分
-
----
-
-## 致谢
-
-- [JimLiu/baoyu-skills](https://github.com/JimLiu/baoyu-skills) — 出图引擎参考架构
-- [EvoLinkAI/awesome-gpt-image-2-prompts](https://github.com/EvoLinkAI/awesome-gpt-image-2-prompts) — 模板灵感
-- OpenAI gpt-image-2 — 99% 中文文字渲染让这一切成为可能
 
 ---
 
