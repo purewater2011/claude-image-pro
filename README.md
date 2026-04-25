@@ -47,16 +47,30 @@ cp .env.example ~/.claude-image-pro/.env
 # 编辑填入你的 API key 和 base url
 ```
 
-### 3. 注册成 Claude Code Skill
+### 3. 安装为 Claude Code Skill
 
-把仓库根目录链接到 Claude Code 的 skills 目录：
+Claude Code 会自动加载 `~/.claude/skills/` 下的 skill。把本仓库链接进去即可：
 
 ```bash
-# macOS / Linux
+# 确保 skills 目录存在
+mkdir -p ~/.claude/skills
+
+# 软链接（推荐：仓库更新后 skill 自动跟随）
 ln -s "$(pwd)" ~/.claude/skills/claude-image-pro
+
+# 或者直接拷贝（不需要跟仓库同步时）
+# cp -r "$(pwd)" ~/.claude/skills/claude-image-pro
 ```
 
-或者 Claude Code plugin 形式（v0.2 计划支持）。
+验证安装：
+
+```bash
+ls -la ~/.claude/skills/claude-image-pro/SKILL.md
+```
+
+然后**重启 Claude Code**（或开新会话），输入 `/image 画一张红苹果`,Claude 会自动加载 skill 并按 `SKILL.md` 流程出图。
+
+> 不用手动注册 — Claude Code 启动时会扫描 `~/.claude/skills/*/SKILL.md` 的 frontmatter（name / description / triggers），按需加载。
 
 ### 依赖
 
