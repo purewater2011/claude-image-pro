@@ -6,7 +6,10 @@
   "plugins": [
     {
       "name": "claude-image-pro",
-      "source": ".",
+      "source": {
+        "source": "github",
+        "repo": "purewater2011/claude-image-pro"
+      },
       "description": "让 Claude Code 一句中文出可商用图：自动 200+ 字结构化 prompt + GPT Image 2",
       "version": "0.1.0",
       "category": "image-generation",
