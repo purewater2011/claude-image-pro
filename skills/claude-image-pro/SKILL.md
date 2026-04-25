@@ -5,15 +5,10 @@ description: |
   auto-expand to a 200+ char structured prompt, and get a publishable image out.
   Covers 5 high-frequency Chinese scenarios: Douyin UI / Weibo / Xiaohongshu / poster /
   X tweet. Defaults to 9:16 vertical 2K for short-video platforms.
-  Use when user says "画图" "画一张" "生成图片" "/image" "出张图" "做封面".
+  Use when user says "画图" "画一张" "生成图片" "出张图" "做封面" or invokes /claude-image-pro.
 version: 0.1.0
-triggers:
-  - 画图
-  - 画一张
-  - 生成图片
-  - /image
-  - 出张图
-  - 做封面
+when_to_use: |
+  画图 / 画一张 / 生成图片 / 出张图 / 做封面 / draw image / generate image
 allowed-tools:
   - Bash
   - Read
@@ -121,7 +116,7 @@ python3 "$SKILL_DIR/scripts/generator.py" \
 
 ## A/B 对比模式（演示 skill 价值用）
 
-用户在输入里包含 "对比" / "/image-ab" / "ab模式" 时，跑两次出图：
+用户在输入里包含 "对比" / "ab" / "ab模式" 关键字时，跑两次出图：
 
 1. **Raw 路径**：跳过 Step 2/3，直接把用户输入当 prompt 喂 generator
    ```bash
@@ -153,13 +148,13 @@ python3 "$SKILL_DIR/scripts/generator.py" \
 ## 用法示例
 
 ```
-用户: /image 画一张抖音热搜榜，第一名 Claude 账号死了
+用户: /claude-image-pro 画一张抖音热搜榜，第一名 Claude 账号死了
 你:   [按 Step 1-4 执行，最终交付 out.png]
 
-用户: /image 做一张科技海报，主题"GPT Image 2 上线" 输出到 day14-cover.png
+用户: /claude-image-pro 做一张科技海报，主题"GPT Image 2 上线" 输出到 day14-cover.png
 你:   [Step 4 把 OUTPUT_PATH 设成 day14-cover.png]
 
-用户: /image-ab 画一张小红书笔记，标题"我用AI画图月入5000"
+用户: /claude-image-pro ab模式 画一张小红书笔记，标题"我用AI画图月入5000"
 你:   [跑 A/B 对比模式]
 ```
 

@@ -1,0 +1,12 @@
+{
+  "name": "claude-image-pro",
+  "version": "0.1.0",
+  "description": "让 Claude Code 一句中文出可商用图：自动 200+ 字结构化 prompt + GPT Image 2",
+  "author": {
+    "name": "purewater2011"
+  },
+  "homepage": "https://github.com/purewater2011/claude-image-pro",
+  "repository": "https://github.com/purewater2011/claude-image-pro",
+  "license": "MIT",
+  "keywords": ["image", "gpt-image-2", "openai", "prompt", "douyin", "chinese"]
+}

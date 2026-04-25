@@ -1,0 +1,17 @@
+{
+  "name": "claude-image-pro",
+  "owner": {
+    "name": "purewater2011"
+  },
+  "plugins": [
+    {
+      "name": "claude-image-pro",
+      "source": ".",
+      "description": "让 Claude Code 一句中文出可商用图：自动 200+ 字结构化 prompt + GPT Image 2",
+      "version": "0.1.0",
+      "category": "image-generation",
+      "tags": ["image", "openai", "gpt-image-2", "chinese", "douyin"],
+      "keywords": ["画图", "出图", "image", "gpt-image-2"]
+    }
+  ]
+}
